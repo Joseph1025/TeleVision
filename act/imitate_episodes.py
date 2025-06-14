@@ -47,11 +47,16 @@ def main(args):
 
     # get task parameters
     # is_sim = task_name[:4] == 'sim_'
-    task_dir, task_name = parse_id(RECORD_DIR, args['taskid'])
-    dataset_dir = (Path(task_dir) / 'processed').resolve()
+    if args['taskid'] == '00':
+        dataset_dir = (DATA_DIR / 'processed').resolve()
+        task_name = args['taskid']
+    else:
+        task_dir, task_name = parse_id(RECORD_DIR, args['taskid'])
+        dataset_dir = (Path(task_dir) / 'processed').resolve()
     ckpt_dir = (LOG_DIR / task_name / args['exptid']).resolve()
     print("*"*20)
     print(f"Task name: {task_name}")
+    print(f"Dataset dir: {dataset_dir}")
     print("*"*20)
 
     # print(f"Checkpoint dir: {ckpt_dir}")
@@ -66,7 +71,7 @@ def main(args):
     state_dim = 26
     action_dim = 28
     lr_backbone = 1e-5
-    backbone = 'dino_v2'
+    backbone = 'resnet18'
     if policy_class == 'ACT':
         enc_layers = 4
         dec_layers = 7
@@ -353,6 +358,7 @@ if __name__ == '__main__':
     parser.add_argument('--taskid', action='store', type=str, help='task id', required=True)
     parser.add_argument('--exptid', action='store', type=str, help='experiment id', required=True)
     parser.add_argument('--source', choices=['self', 'ssd'], default='self')
+    parser.add_argument('--dataset_path', action='store', type=str, help='custom dataset path', required=False)
     args = vars(parser.parse_args())
 
     if args['source'] == 'self':

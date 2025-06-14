@@ -1,6 +1,7 @@
 import h5py
 import numpy as np
-import pyzed.sl as sl
+from pyzed import sl
+# import pyzed.sl as sl
 import time
 import cv2
 import matplotlib.pyplot as plt 
